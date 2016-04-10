@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "B/4ldBb1VWWyZqYSXAXbERnrIGM=",
+			"path": "github.com/aws/aws-sdk-go",
+			"revision": "af189259aa5a4fc580223a86117f25b2b92894ce",
+			"revisionTime": "2016-04-07T22:01:44-07:00"
+		}
+	],
+	"rootPath": "github.com/eternnoir/mew_gif_bot"
+}
