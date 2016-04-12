@@ -12,7 +12,7 @@ import (
 
 func ProcessInlineQuery(bot *gotelebot.TeleBot, q *types.InlineQuery, fs utils.FileStore) error {
 	log.Infof("Get New InlineQuery %#v", q)
-	if q.Query == "" {
+	if strings.TrimSpace(q.Query) == "" {
 		return SendAllGifs(bot, q, fs)
 	}
 	return SendByQuery(bot, q, fs)
