@@ -10,9 +10,10 @@ import (
 )
 
 type Config struct {
-	TeleToken string
-	RedisAddr string
-	RedisPwd  string
+	TeleToken  string
+	RedisAddr  string
+	RedisPwd   string
+	WelcomeMsg string
 }
 
 type MewGif struct {
@@ -28,6 +29,7 @@ func NewMewGif(config Config, debug bool) *MewGif {
 	ret.DebugMode = debug
 	ret.Token = config.TeleToken
 	ret.telebot = gotelebot.InitTeleBot(ret.Token)
+	handlers.WelcomeMsg = config.WelcomeMsg
 	fs, err := redis.NewRedisStore(config.RedisAddr, config.RedisPwd)
 	if err != nil {
 		log.Error(err)

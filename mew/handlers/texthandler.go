@@ -12,11 +12,17 @@ import (
 var UserState map[float64]func(bot *gotelebot.TeleBot, message *types.Message, fs utils.FileStore) error
 var UserGif map[float64]*types.Document
 
+var WelcomeMsg string
+
 func ProcessMessage(bot *gotelebot.TeleBot, message *types.Message, fs utils.FileStore) error {
 	log.Infof("Get Text message: %#v", message.Text)
 	if UserState == nil {
 		UserState = make(map[float64]func(bot *gotelebot.TeleBot, message *types.Message, fs utils.FileStore) error)
 		UserGif = make(map[float64]*types.Document)
+	}
+
+	if message.Text == "/start" || message.Text == "/help" {
+		return Welcome(bot, message)
 	}
 
 	if strings.HasPrefix(message.Text, "/new") {
@@ -30,6 +36,13 @@ func ProcessMessage(bot *gotelebot.TeleBot, message *types.Message, fs utils.Fil
 		return val(bot, message, fs)
 	}
 	return nil
+}
+
+func Welcome(bot *gotelebot.TeleBot, m *types.Message) error {
+	msg := WelcomeMsg
+	retmsg, err := bot.SendMessage(int(m.Chat.Id), msg, nil)
+	log.Debugf("Get return msg: %#v", retmsg)
+	return err
 }
 
 func CreateNewGif(bot *gotelebot.TeleBot, m *types.Message, fs utils.FileStore) error {
