@@ -6,22 +6,19 @@ import (
 	"github.com/eternnoir/gotelebot/types"
 	"github.com/eternnoir/mew_gif_bot/mew/handlers"
 	"github.com/eternnoir/mew_gif_bot/mew/utils"
-	"github.com/eternnoir/mew_gif_bot/mew/utils/localfile"
+	"github.com/eternnoir/mew_gif_bot/mew/utils/redis"
 )
 
 type Config struct {
-	TeleToken     string
-	AwsAccessKey  string
-	AwsSecretKey  string
-	BucketName    string
-	LoaclFilePath string
-	ServerUrl     string
+	TeleToken string
+	RedisAddr string
+	RedisPwd  string
 }
 
 type MewGif struct {
 	Token     string
 	telebot   *gotelebot.TeleBot
-	fileSer   utils.FileService
+	storeage  utils.FileStore
 	DebugMode bool
 }
 
@@ -31,7 +28,12 @@ func NewMewGif(config Config, debug bool) *MewGif {
 	ret.DebugMode = debug
 	ret.Token = config.TeleToken
 	ret.telebot = gotelebot.InitTeleBot(ret.Token)
-	ret.fileSer = &localfile.LocalFS{Path: config.LoaclFilePath, ServerUrl: config.ServerUrl}
+	fs, err := redis.NewRedisStore(config.RedisAddr, config.RedisPwd)
+	if err != nil {
+		log.Error(err)
+		return nil
+	}
+	ret.storeage = fs
 	return &ret
 }
 
@@ -46,7 +48,7 @@ func (mew *MewGif) StartPolling() {
 			go mew.HandleNewMessage(m)
 		}
 	}()
-	func() {
+	go func() {
 		newQuery := bot.InlineQuerys
 		for {
 			q := <-newQuery
@@ -54,11 +56,21 @@ func (mew *MewGif) StartPolling() {
 			go mew.HandleNewInlineQuery(q)
 		}
 	}()
+
+	func() {
+		newresult := bot.ChosenInlineResults
+		for {
+			r := <-newresult
+			log.Debugf("Get ChosenInlineResult:%#v \n", r)
+			go mew.ProcessChosen(r)
+		}
+	}()
+
 }
 
 func (mew *MewGif) HandleNewMessage(message *types.Message) {
 	log.Infof("Process new message: %#v", message)
-	err := handlers.ProcessMessage(mew.telebot, message, mew.fileSer)
+	err := handlers.ProcessMessage(mew.telebot, message, mew.storeage)
 	if err != nil {
 		log.Errorf("ProcessTextMessage error: %s", err)
 	}
@@ -66,4 +78,16 @@ func (mew *MewGif) HandleNewMessage(message *types.Message) {
 
 func (mew *MewGif) HandleNewInlineQuery(inlinequery *types.InlineQuery) {
 	log.Infof("Process new inlinequery: %#v", inlinequery)
+	err := handlers.ProcessInlineQuery(mew.telebot, inlinequery, mew.storeage)
+	if err != nil {
+		log.Errorf("ProcessInlineQuery error: %s", err)
+	}
+}
+
+func (mew *MewGif) ProcessChosen(chosen *types.ChosenInlineResult) {
+	log.Infof("Process new ChosenInlineResult: %#v", chosen)
+	err := handlers.ProcessChosen(mew.telebot, chosen, mew.storeage)
+	if err != nil {
+		log.Errorf("ProcessChosen error: %s", err)
+	}
 }

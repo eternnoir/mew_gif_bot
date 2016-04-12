@@ -1,49 +1,6 @@
 {
 	"comment": "",
 	"ignore": "test",
-	"package": [
-		{
-			"checksumSHA1": "1IeSD7UyLXPqBP1nbaqpT9fSanQ=",
-			"path": "github.com/BurntSushi/toml",
-			"revision": "bbd5bb678321a0d6e58f1099321dfa73391c1b6f",
-			"revisionTime": "2016-03-08T18:19:12-08:00"
-		},
-		{
-			"checksumSHA1": "DWPL08pD/SQ2GzLfoR7ZXnjj7Sw=",
-			"path": "github.com/Sirupsen/logrus",
-			"revision": "4b6ea7319e214d98c938f12692336f7ca9348d6b",
-			"revisionTime": "2016-03-17T14:11:10Z"
-		},
-		{
-			"checksumSHA1": "B/4ldBb1VWWyZqYSXAXbERnrIGM=",
-			"path": "github.com/aws/aws-sdk-go",
-			"revision": "af189259aa5a4fc580223a86117f25b2b92894ce",
-			"revisionTime": "2016-04-07T22:01:44-07:00"
-		},
-		{
-			"checksumSHA1": "SJZL/BJk3b+101dCjCMy0VT9HSo=",
-			"path": "github.com/goamz/goamz",
-			"revision": "02d5144a587b982e33b95f484a34164ce6923c99",
-			"revisionTime": "2016-04-07T11:34:11+02:00"
-		},
-		{
-			"checksumSHA1": "v03kl/38WTRlK7AdWr3lDrvsFHQ=",
-			"path": "github.com/goamz/goamz/aws",
-			"revision": "02d5144a587b982e33b95f484a34164ce6923c99",
-			"revisionTime": "2016-04-07T11:34:11+02:00"
-		},
-		{
-			"checksumSHA1": "MNbuTK/f1p2AzM1umds5E0fKS10=",
-			"path": "github.com/goamz/goamz/s3",
-			"revision": "02d5144a587b982e33b95f484a34164ce6923c99",
-			"revisionTime": "2016-04-07T11:34:11+02:00"
-		},
-		{
-			"checksumSHA1": "sFD8LpJPQtWLwGda3edjf5mNUbs=",
-			"path": "github.com/vaughan0/go-ini",
-			"revision": "a98ad7ee00ec53921f08832bc06ecf7fd600e6a1",
-			"revisionTime": "2013-09-23T16:52:12+02:00"
-		}
-	],
+	"package": [],
 	"rootPath": "github.com/eternnoir/mew_gif_bot"
 }

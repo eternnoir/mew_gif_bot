@@ -1,3 +1,2 @@
-TeleToken = "197722016:AAGryZCaR_5YfGb7kpOmiAPHts8Ix-JgJx0"
-LoaclFilePath = "/mnt/mewmew"
-ServerUrl= "https://s3-ap-northeast-1.amazonaws.com/mewmew"
+TeleToken = ""
+RedisAddr = "localhost:6379"
