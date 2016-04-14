@@ -62,6 +62,9 @@ func SendAllGifs(bot *gotelebot.TeleBot, q *types.InlineQuery, fs utils.FileStor
 
 func genInlineGifQuery(fileIds []string) []interface{} {
 	ret := []interface{}{}
+	if len(fileIds) > 50 {
+		fileIds = fileIds[:49]
+	}
 
 	for _, fid := range fileIds {
 		s := strings.Split(fid, "::")

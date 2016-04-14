@@ -14,6 +14,9 @@ type Config struct {
 	RedisAddr  string
 	RedisPwd   string
 	WelcomeMsg string
+	ListenUrl  string
+	KeyPath    string
+	CerPath    string
 }
 
 type MewGif struct {
