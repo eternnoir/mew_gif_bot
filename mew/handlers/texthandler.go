@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/hex"
+	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/eternnoir/gotelebot"
 	"github.com/eternnoir/gotelebot/types"
@@ -25,6 +26,14 @@ func ProcessMessage(bot *gotelebot.TeleBot, message *types.Message, fs utils.Fil
 		return Welcome(bot, message)
 	}
 
+	if message.Text == "/reset" {
+		return Reset(bot, message, fs)
+	}
+
+	if message.Text == "/status" {
+		return Status(bot, message, fs)
+	}
+
 	if strings.HasPrefix(message.Text, "/new") {
 		delete(UserState, message.Chat.Id)
 		delete(UserGif, message.Chat.Id)
@@ -40,6 +49,33 @@ func ProcessMessage(bot *gotelebot.TeleBot, message *types.Message, fs utils.Fil
 
 func Welcome(bot *gotelebot.TeleBot, m *types.Message) error {
 	msg := WelcomeMsg
+	retmsg, err := bot.SendMessage(int(m.Chat.Id), msg, nil)
+	log.Debugf("Get return msg: %#v", retmsg)
+	return err
+}
+
+func Reset(bot *gotelebot.TeleBot, m *types.Message, fs utils.FileStore) error {
+	log.Infof("Start to reset all score.")
+	err := fs.Reset()
+	if err != nil {
+		log.Errorf("Reset all gifs score fail %s", err)
+		return err
+	}
+	msg := "Done"
+	retmsg, err := bot.SendMessage(int(m.Chat.Id), msg, nil)
+	log.Debugf("Get return msg: %#v", retmsg)
+	return err
+}
+
+func Status(bot *gotelebot.TeleBot, m *types.Message, fs utils.FileStore) error {
+	log.Infof("Start to get status.")
+	status, err := fs.GetStatus()
+	if err != nil {
+		log.Errorf("Reset all gifs score fail %s", err)
+		return err
+	}
+	log.Infof("Get status %#v", status)
+	msg := fmt.Sprintf("MewMew Bot Status: \n Total Cat Gifs: %d \n Total Querys: %d \n Total number of gif sended: %d", status.TotalGifs, status.TotalQuerys, status.TotalSend)
 	retmsg, err := bot.SendMessage(int(m.Chat.Id), msg, nil)
 	log.Debugf("Get return msg: %#v", retmsg)
 	return err
