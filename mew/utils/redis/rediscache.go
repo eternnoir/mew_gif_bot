@@ -43,7 +43,7 @@ func (rs *RedisStore) Put(key, fileid string) error {
 		return err
 	}
 	defer c.Close()
-	_, err = c.Do("ZADD", "ALLGIF", 1000000, fileid)
+	_, err = c.Do("ZADD", "ALLGIF", 0, fileid)
 	if err != nil {
 		return err
 	}
@@ -70,7 +70,7 @@ func (rs *RedisStore) GetAll() ([]string, error) {
 		return nil, err
 	}
 	defer c.Close()
-	return redis.Strings(c.Do("ZRANGE", "ALLGIF", 0, -1))
+	return redis.Strings(c.Do("ZREVRANGE", "ALLGIF", 0, -1))
 }
 
 func (rs *RedisStore) Hint(key string) {
@@ -79,7 +79,7 @@ func (rs *RedisStore) Hint(key string) {
 		return
 	}
 	defer c.Close()
-	_, err = c.Do("ZINCRBY", "ALLGIF", -1, key)
+	_, err = c.Do("ZINCRBY", "ALLGIF", 1, key)
 	if err != nil {
 		log.Error(err)
 	}
